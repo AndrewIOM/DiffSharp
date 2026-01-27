@@ -1,23 +1,32 @@
 #!/usr/bin/env -S dotnet fsi
 
-#I "../tests/DiffSharp.Tests/bin/Debug/net6.0"
+#I "../tests/DiffSharp.Tests/bin/Debug/net10.0"
 #r "DiffSharp.Core.dll"
 #r "DiffSharp.Data.dll"
 #r "DiffSharp.Backends.Torch.dll"
 
 // Libtorch binaries
 // Option A: you can use a platform-specific nuget package
-#r "nuget: TorchSharp-cpu, 0.96.5"
 // #r "nuget: TorchSharp-cuda-linux, 0.96.5"
 // #r "nuget: TorchSharp-cuda-windows, 0.96.5"
 // Option B: you can use a local libtorch installation
-// System.Runtime.InteropServices.NativeLibrary.Load("/home/gunes/anaconda3/lib/python3.8/site-packages/torch/lib/libtorch.so")
-
+System.Runtime.InteropServices.NativeLibrary.Load("/Users/andrewmartin/.nuget/packages/torchsharp/0.105.2/lib/net6.0/cpu/libomp.dylib")
+System.Runtime.InteropServices.NativeLibrary.Load("/Users/andrewmartin/.nuget/packages/torchsharp/0.105.2/lib/net6.0/cpu/libLibTorchSharp.dylib")
 
 open DiffSharp
 open DiffSharp.Model
 open DiffSharp.Optim
 open DiffSharp.Data
+
+dsharp.tensor(1.2)
+
+
+DiffSharp.DeviceType.MPS
+
+dsharp.config(backend=Backend.Torch, device=Device.MPS)
+dsharp.seed(0)
+
+dsharp.isDeviceAvailable
 
 
 type VAE(xDim:int, zDim:int, ?hDims:seq<int>, ?nonlinearity:Tensor->Tensor, ?nonlinearityLast:Tensor->Tensor) =

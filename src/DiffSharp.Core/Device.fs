@@ -27,6 +27,8 @@ type DeviceType =
     | FPGA = 7 // FPGA
     | MSNPU = 8 // MSNPU
     | XLA = 9 // XLA / TPU
+    | MPS = 13 // Apple Silicon
+    | META = 14
 
 /// Represents a device specification.
 [<Struct>]
@@ -35,8 +37,8 @@ type Device =
     member x.DeviceType = (let (Device(a,_)) = x in a)
     member x.DeviceIndex = (let (Device(_,b)) = x in b)
     static member CPU = Device(DeviceType.CPU, -1)
-    static member GPU = Device(DeviceType.CUDA, 0)
-
+    static member CUDA = Device(DeviceType.CUDA, 0)
+    static member MPS = Device(DeviceType.MPS, 0)
     member internal x.Code = (int x.DeviceType <<< 4) + x.DeviceIndex
 
     member internal x.Name =
@@ -51,6 +53,8 @@ type Device =
         | DeviceType.FPGA -> "fpga"
         | DeviceType.MSNPU -> "msnpu"
         | DeviceType.XLA -> "xla"
+        | DeviceType.MPS -> "mps"
+        | DeviceType.META -> "meta"
         | _ -> failwith "unknown device type") + string x.DeviceIndex
 
     override x.ToString() = x.Name

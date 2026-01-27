@@ -119,7 +119,7 @@ type Tensor =
     member t.cpu() = t.move(Device.CPU)
 
     /// Returns a new tensor with the same contents moved to the primary GPU device
-    member t.gpu() = t.move(Device.GPU)
+    member t.gpu() = t.move(Device.CUDA)
 
     /// Returns a new tensor with each element converted to type bool
     member t.bool() = t.cast(Dtype.Bool)

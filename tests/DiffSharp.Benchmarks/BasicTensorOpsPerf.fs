@@ -93,7 +93,7 @@ type BasicTensorOps() =
         match box torchTensor with 
         | null -> 
             dtype <- (match perf.dtypeName with "int32" -> Dtype.Int32 | "float32" -> Dtype.Float32 | _ -> Dtype.Float64)
-            device <- if perf.deviceName = "cpu" then Device.CPU else Device.GPU
+            device <- if perf.deviceName = "cpu" then Device.CPU else Device.CUDA
             if not (dsharp.isDeviceTypeAvailable(device.DeviceType, backend)) then failwith "device not supported"
             dsharp.config(dtype=dtype,backend=backend,device=device)
             rawData <- 
