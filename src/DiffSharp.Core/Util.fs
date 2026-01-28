@@ -343,11 +343,14 @@ module DataConverter =
 
     [<ExcludeFromCodeCoverage>]
     let inline dataOfValues ofFloat32 ofFloat64 ofInt8 ofInt16 ofInt32 ofInt64 ofBool ofByte (value:obj) : (^T[] * int[]) = 
-        match value |> tryFlatArrayAndShape<float32> with
-        | Some (values, shape) -> (values |> Array.map ofFloat32, shape)
+        match value |> tryFlatArrayAndShape<bool> with
+        | Some (values, shape) -> (values |> Array.map ofBool, shape) 
         | None -> 
         match value |> tryFlatArrayAndShape<double> with
         | Some (values, shape) -> (values |> Array.map ofFloat64, shape) 
+        | None -> 
+        match value |> tryFlatArrayAndShape<float32> with
+        | Some (values, shape) -> (values |> Array.map ofFloat32, shape)
         | None -> 
         match value |> tryFlatArrayAndShape<int64> with
         | Some (values, shape) -> (values |> Array.map ofInt64, shape)
@@ -357,9 +360,6 @@ module DataConverter =
         | None -> 
         match value |> tryFlatArrayAndShape<int16>  with
         | Some (values, shape) -> (values |> Array.map ofInt16, shape)
-        | None -> 
-        match value |> tryFlatArrayAndShape<bool> with
-        | Some (values, shape) -> (values |> Array.map ofBool, shape) 
         | None -> 
         match value |> tryFlatArrayAndShape<byte>  with
         | Some (values, shape) -> (values |> Array.map ofByte, shape)
