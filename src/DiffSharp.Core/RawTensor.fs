@@ -206,6 +206,7 @@ type RawTensor() =
                 let a,s = DataConverter.dataOfValuesForBool values
                 (a :> Array), s, Dtype.Bool
             | Some Dtype.Float64 ->
+                // Here, 
                 let a,s = DataConverter.dataOfValuesForFloat64 values
                 (a :> Array), s, Dtype.Float64
             | Some Dtype.Float32 ->

@@ -1,18 +1,40 @@
 #!/usr/bin/env -S dotnet fsi
 
-#I "../tests/DiffSharp.Tests/bin/Debug/net6.0"
+#I "../tests/DiffSharp.Tests/bin/Debug/net10.0"
 #r "DiffSharp.Core.dll"
 #r "DiffSharp.Data.dll"
 #r "DiffSharp.Backends.Torch.dll"
 
 // Libtorch binaries
 // Option A: you can use a platform-specific nuget package
-#r "nuget: TorchSharp-cpu, 0.96.5"
+#r "nuget: TorchSharp-cpu, 0.105.2"
 // #r "nuget: TorchSharp-cuda-linux, 0.96.5"
 // #r "nuget: TorchSharp-cuda-windows, 0.96.5"
 // Option B: you can use a local libtorch installation
 // System.Runtime.InteropServices.NativeLibrary.Load("/home/gunes/anaconda3/lib/python3.8/site-packages/torch/lib/libtorch.so")
 
+
+open TorchSharp
+
+try
+    let _ = torch.zeros(1)
+    printfn "Torch initialized"
+with ex ->
+    printfn "Torch init failed: %s" ex.Message
+
+open System
+open System.Diagnostics
+
+/// Lists all native libraries currently loaded into the process.
+let listLoadedNativeLibraries () =
+    let proc = Process.GetCurrentProcess()
+    printfn "Loaded native libraries:"
+    for m in proc.Modules do
+        // Only show native libraries (.dylib on macOS)
+        if m.FileName.EndsWith(".dylib") then
+            printfn "  %s" m.FileName
+
+listLoadedNativeLibraries()
 
 open DiffSharp
 open DiffSharp.Compose
